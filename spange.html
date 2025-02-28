@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spange - BioLink</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background-image: url('https://media.discordapp.net/attachments/1316522514330947716/1344792702109356112/DUt0WK0Zdl.jpg?ex=67c2334d&is=67c0e1cd&hm=c3e6891be341bd4b44edaf51b216e1a28ad35583b87ffeae2e72446fdd70ae8b&=&format=webp&width=867&height=650');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        #quote-container {
+            min-height: 60px;
+            font-size: 1.2em;
+            margin: 20px auto;
+            width: 80%;
+            position: relative;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #00ff00;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background: #00ff00;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .sparkle-img {
+            position: fixed;
+            pointer-events: none;
+            width: 30px;
+            height: 30px;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.2s;
+            image-rendering: crisp-edges;
+        }
+
+        @media (max-width: 768px) {
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            #quote-container {
+                width: 90%;
+                font-size: 1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="content">
+        <img src="https://cdn.discordapp.com/avatars/1053904743350681700/d2bfee3738d50f34723c8ee7e34f6a65.webp?size=128" alt="Spange" class="profile-img">
+        <h1>Spange</h1>
+        <div id="quote-container"></div>
+    </div>
+
+    <script>
+        // Typewriter effect
+        const quotes = [
+            "Sponsored by https://elizabeta.pics/",
+            "+1 nut busted to elizabeta",
+            "Your christianism is too aggressive"
+        ];
+
+        let currentQuote = 0;
+        const quoteElement = document.getElementById('quote-container');
+        let isDeleting = false;
+        let text = '';
+
+        function typeText() {
+            const fullText = quotes[currentQuote];
+            
+            if (isDeleting) {
+                text = fullText.substring(0, text.length - 1);
+            } else {
+                text = fullText.substring(0, text.length + 1);
+            }
+
+            quoteElement.innerHTML = text + `<span class="cursor"></span>`;
+
+            let typeSpeed = 100;
+            if (isDeleting) typeSpeed /= 2;
+
+            if (!isDeleting && text === fullText) {
+                typeSpeed = 2000;
+                isDeleting = true;
+            } else if (isDeleting && text === '') {
+                isDeleting = false;
+                currentQuote = (currentQuote + 1) % quotes.length;
+                typeSpeed = 500;
+            }
+
+            setTimeout(typeText, typeSpeed);
+        }
+
+        // Start typing effect
+        setTimeout(typeText, 1000);
+
+        // Optimized sparkle system
+        const sparklePool = [];
+        const maxSparkles = 20;
+        let sparkleImage = null;
+
+        // Preload the image
+        function preloadSparkleImage() {
+            sparkleImage = new Image();
+            sparkleImage.src = 'https://media.discordapp.net/attachments/1280290042375307409/1299069514167619665/5888776217723781953-removebg-preview.png?ex=67c1f943&is=67c0a7c3&hm=603462f117eb47fb9172c14298d98f147acb61b08d2bd9964f71746d4a190c84&=&format=webp&quality=lossless';
+            sparkleImage.onload = () => {
+                // Initialize sparkle pool
+                for (let i = 0; i < maxSparkles; i++) {
+                    const sparkle = new Image();
+                    sparkle.src = sparkleImage.src;
+                    sparkle.className = 'sparkle-img';
+                    sparkle.style.display = 'none';
+                    document.body.appendChild(sparkle);
+                    sparklePool.push(sparkle);
+                }
+            };
+        }
+
+        function getSparkle() {
+            // Find an available sparkle
+            for (const sparkle of sparklePool) {
+                if (sparkle.style.display === 'none') {
+                    return sparkle;
+                }
+            }
+            return null;
+        }
+
+        // Rate limiting
+        let lastMouseMove = 0;
+        document.addEventListener('mousemove', function(e) {
+            const now = Date.now();
+            if (now - lastMouseMove < 50) return; // Limit to 20 sparkles per second
+            lastMouseMove = now;
+            
+            // Trigger sparkle effect
+            const viewportHeight = window.innerHeight;
+            const startY = e.clientY;
+            const distance = viewportHeight - startY;
+            const duration = Math.max(1000, distance * 2);
+
+            const sparkle = getSparkle();
+            if (!sparkle) return;
+
+            // Position sparkle
+            sparkle.style.left = `${e.clientX + Math.random() * 30 - 15}px`;
+            sparkle.style.top = `${e.clientY + Math.random() * 30 - 15}px`;
+            sparkle.style.display = 'block';
+            sparkle.style.opacity = '1';
+
+            // Animate using Web Animations API
+            const animation = sparkle.animate([
+                { transform: 'translateY(0) scale(1)', opacity: 1 },
+                { transform: `translateY(${distance}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: duration,
+                easing: 'linear'
+            });
+
+            animation.onfinish = () => {
+                sparkle.style.display = 'none';
+                sparkle.style.opacity = '0';
+            };
+        });
+
+        // Initialize sparkle system
+        preloadSparkleImage();
+    </script>
+</body>
+</html>
