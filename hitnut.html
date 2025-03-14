@@ -1,192 +1,818 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Coming Soon</title>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <title>HITNUT.club :: Access Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
+        :root {
+            --accent: #ff4655;
+            --accent-dark: #cc2e3a;
+            --accent-glow: rgba(255, 70, 85, 0.6);
+            --bg: #0a0b11;
+            --surface: #161723;
+            --surface-dark: #10111d;
+            --text: #e3e3e3;
+            --text-secondary: #9ba1b3;
+        }
+
         * {
+            margin: 0;
+            padding: 0;
             box-sizing: border-box;
         }
 
+        html, body {
+            font-size: 16px;
+        }
+
         body {
-            margin: 0;
-            padding: 140px 0 0;
-            background-color: #2e2e2e;
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(36, 38, 56, 0.4) 0%, rgba(10, 11, 17, 0) 40%),
+                radial-gradient(circle at 80% 80%, rgba(36, 38, 56, 0.4) 0%, rgba(10, 11, 17, 0) 40%),
+                linear-gradient(45deg, rgba(15, 16, 27, 0.8) 0%, rgba(20, 21, 35, 0.8) 100%);
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
             min-height: 100vh;
-            position: relative;
-            font-family: Arial, sans-serif;
-        }
-
-        /* Navigation Structure */
-        .top-nav {
-            position: fixed;
-            top: 20px;
-            left: 10%;
-            width: 80%;
-            background: #1a1a1a;
-            height: 40px;
+            overflow-x: hidden;
             display: flex;
-            align-items: center;
-            padding: 0 15px;
-            z-index: 1000;
-            border-radius: 8px 8px 0 0;
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            flex-direction: column;
+            max-width: 100%;
         }
 
-        .nav-logo {
-            height: 25px;
-            max-width: 120px;
-        }
-
-        .middle-nav {
+        .noise-overlay {
             position: fixed;
-            top: 60px;
-            left: 10%;
-            width: 80%;
-            background: #2a2a2a;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            padding: 0 15px;
-            gap: 20px;
-            z-index: 1000;
-            border-left: 1px solid #3a3a3a;
-            border-right: 1px solid #3a3a3a;
-        }
-
-        .middle-nav a {
-            color: #ddd;
-            text-decoration: none;
-            font-size: 14px;
-            text-transform: uppercase;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            display: flex;
-            align-items: center;
-            padding: 0 10px;
-            transition: all 0.3s;
-            position: relative;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .bottom-nav {
+        .grid-overlay {
             position: fixed;
-            top: 110px;
-            left: 10%;
-            width: 80%;
-            background: #1a1a1a;
-            height: 30px;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(to right, rgba(255, 70, 85, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 70, 85, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particles {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--surface) 0%, rgba(26, 27, 43, 0.8) 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 70, 85, 0.1);
+            backdrop-filter: blur(4px);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-family: 'Audiowide', cursive;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            position: relative;
+            background: linear-gradient(45deg, var(--accent), #ff7080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 70, 85, 0.2);
             display: flex;
             align-items: center;
-            padding: 0 15px;
-            color: #888;
-            font-size: 12px;
-            z-index: 1000;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 10px 10px rgba(0,0,0,0.5);
-            border: 1px solid #2a2a2a;
-            border-top: none;
+            gap: 10px;
         }
 
-        /* Rainbow Glow Effect */
-        .merch-glow {
-            position: relative;
-            color: white !important;
-            padding: 0 15px !important;
-        }
-
-        .merch-glow::before {
+        .logo::before {
             content: '';
             position: absolute;
-            top: 12px;
-            left: 8px;
-            right: 8px;
-            bottom: 12px;
-            background: linear-gradient(45deg,
-                #ff0000,
-                #ff7f00,
-                #ffff00,
-                #00ff00,
-                #0000ff,
-                #8b00ff,
-                #ff0000);
-            background-size: 400%;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 50%;
+            filter: blur(15px);
+            opacity: 0.7;
+            animation: pulse 2s infinite;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .logo i {
+            color: var(--accent);
+            font-size: 22px;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; transform: translateY(-50%) scale(1); }
+            50% { opacity: 0.4; transform: translateY(-50%) scale(1.2); }
+            100% { opacity: 0.7; transform: translateY(-50%) scale(1); }
+        }
+
+        .status-bar {
+            background: rgba(16, 17, 27, 0.7);
+            color: var(--text-secondary);
+            padding: 8px 30px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255, 70, 85, 0.05);
+            backdrop-filter: blur(4px);
+        }
+
+        .server-status span {
+            color: #00ff88;
+            margin-left: 5px;
+        }
+
+        .server-status i {
+            margin-right: 5px;
+        }
+
+        .login-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-panel {
+            background: linear-gradient(135deg, rgba(22, 23, 35, 0.8) 0%, rgba(16, 17, 29, 0.9) 100%);
+            border: 1px solid rgba(255, 70, 85, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 
+                        0 0 20px rgba(255, 70, 85, 0.1),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-panel::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 70, 85, 0.03), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20%, 100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .panel-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .panel-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .panel-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 16px;
+            color: var(--text);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+        }
+
+        .form-control {
+            width: 100%;
+            background: rgba(10, 11, 15, 0.6);
+            border: 1px solid rgba(255, 70, 85, 0.1);
             border-radius: 4px;
-            z-index: -1;
-            animation: glow 8s linear infinite;
-            filter: blur(5px);
+            padding: 12px 15px 12px 45px;
+            color: var(--text);
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 70, 85, 0.2);
+            background: rgba(15, 16, 22, 0.8);
+        }
+
+        .form-actions {
+            margin-top: 30px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--accent-dark), var(--accent));
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 70, 85, 0.3), 
+                        0 0 0 1px rgba(255, 70, 85, 0.4),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 70, 85, 0.4), 
+                        0 0 0 1px rgba(255, 70, 85, 0.5),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(255, 70, 85, 0.2);
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: btnShine 3s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            20%, 100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .btn-secondary {
+            background: rgba(22, 23, 35, 0.8);
+            color: var(--accent);
+            border: 1px solid rgba(255, 70, 85, 0.3);
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 70, 85, 0.05);
+            border-color: var(--accent);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 70, 85, 0.1);
+        }
+
+        .divider::before {
+            margin-right: 15px;
+        }
+
+        .divider::after {
+            margin-left: 15px;
+        }
+
+        .auth-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .auth-option {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px;
+            background: rgba(16, 17, 27, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            color: var(--text);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .auth-option:hover {
+            background: rgba(22, 23, 35, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .auth-option i {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .extra-options {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .extra-options a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .extra-options a:hover {
+            color: var(--accent-dark);
+            text-decoration: underline;
+        }
+
+        .security-badge {
+            position: absolute;
+            bottom: -10px;
+            right: -10px;
+            background: linear-gradient(135deg, #00a160, #00cc7a);
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 4px 10px rgba(0, 204, 122, 0.3);
+            transform: rotate(-5deg);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .security-info {
+            margin-top: 5px;
             opacity: 0.7;
         }
 
-        @keyframes glow {
-            0% { background-position: 0 0; }
-            100% { background-position: 400% 0; }
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 1px solid rgba(255, 70, 85, 0.1);
         }
 
-        /* Coming Soon Text */
-        .coming-soon {
-            font-family: 'Oswald', sans-serif;
-            font-weight: 700;
-            color: white;
-            font-size: 4rem;
+        .tab {
+            flex: 1;
             text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            animation: text-glow 2s ease-in-out infinite;
-            margin: 10vh auto;
-        }
-
-        @keyframes text-glow {
-            0%, 100% { 
-                text-shadow: 0 0 20px rgba(255, 0, 0, 0.8),
-                             0 0 30px rgba(255, 0, 0, 0.6);
-            }
-            50% { 
-                text-shadow: 0 0 40px rgba(255, 0, 0, 1),
-                             0 0 60px rgba(255, 0, 0, 0.8),
-                             0 0 80px rgba(255, 0, 0, 0.6);
-            }
-        }
-
-        /* Copyright */
-        .copyright {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: rgba(255, 255, 255, 0.5);
-            font-family: 'Oswald', sans-serif;
-            font-size: 1rem;
             letter-spacing: 1px;
-            white-space: pre;
+            font-size: 16px;
+            color: var(--text-secondary);
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .tab.active {
+            color: var(--accent);
+        }
+
+        .tab::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: 0.3s;
+        }
+
+        .tab.active::after {
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .remember-me input {
+            margin-right: 10px;
+            accent-color: var(--accent);
+        }
+
+        .glow-lines {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .glow-line {
+            position: absolute;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--accent-glow), transparent);
+            top: 0;
+            height: 100%;
+            animation: moveLine 15s infinite linear;
+        }
+
+        .glow-line:nth-child(1) {
+            left: 20%;
+            height: 70%;
+            animation-delay: 0s;
+            animation-duration: 15s;
+            opacity: 0.2;
+        }
+
+        .glow-line:nth-child(2) {
+            left: 40%;
+            height: 100%;
+            animation-delay: -5s;
+            animation-duration: 17s;
+            opacity: 0.1;
+        }
+
+        .glow-line:nth-child(3) {
+            left: 60%;
+            height: 80%;
+            animation-delay: -2s;
+            animation-duration: 16s;
+            opacity: 0.15;
+        }
+
+        .glow-line:nth-child(4) {
+            left: 80%;
+            height: 90%;
+            animation-delay: -7s;
+            animation-duration: 18s;
+            opacity: 0.1;
+        }
+
+        @keyframes moveLine {
+            0% {
+                transform: translateY(-100%);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Notification Popup */
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: rgba(204, 0, 0, 0.9);
+            color: white;
+            border-radius: 6px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .notification-icon {
+            margin-right: 15px;
+            font-size: 24px;
+            color: white;
+        }
+
+        .notification-message {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            padding: 0 0 0 10px;
+        }
+
+        .notification-close:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 600px) {
+            .login-panel {
+                padding: 20px;
+            }
+
+            .panel-title {
+                font-size: 24px;
+            }
+
+            .auth-options {
+                flex-direction: column;
+            }
+
+            .extra-options {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation -->
-    <div class="top-nav">
-        <img src="https://media.discordapp.net/attachments/1316522514330947716/1344797508202790944/hitnutjill.png?ex=67c237c7&is=67c0e647&hm=5153c4202c41e29be71009a316e39f3e689553dbd0159426a285cc1aa11cbedd&=&format=webp&quality=lossless" 
-             alt="Logo" 
-             class="nav-logo">
+    <div class="noise-overlay"></div>
+    <div class="grid-overlay"></div>
+    <div class="glow-lines">
+        <div class="glow-line"></div>
+        <div class="glow-line"></div>
+        <div class="glow-line"></div>
+        <div class="glow-line"></div>
     </div>
 
-    <!-- Middle Navigation -->
-    <div class="middle-nav">
-        <a href="#">Forums</a>
-        <a href="#">Members</a>
-        <a href="#">Search</a>
-        <a href="#" class="merch-glow">BUY</a>
-        <div style="margin-left: auto;">
-            <a href="#">Register</a>
-            <a href="#">Login</a>
+    <div id="notification" class="notification">
+        <div class="notification-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="notification-message">
+            The forum software is not fully prepared yet. Please try again later.
+        </div>
+        <button class="notification-close" onclick="closeNotification()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-crosshairs"></i> HITNUT.club
+        </div>
+        <div style="color: var(--text-secondary);">
+            <i class="fas fa-exclamation-triangle" style="color: var(--accent); margin-right: 5px;"></i> 
+            You are not logged in
+        </div>
+    </header>
+
+    <div class="status-bar">
+        <div class="server-status">
+            <i class="fas fa-circle"></i> Server Status: <span>ONLINE</span>
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        You are not logged in.
-    </div>
+    <main class="login-container">
+        <div class="login-panel">
+            <div class="panel-header">
+                <div class="panel-title">ACCESS PORTAL</div>
+                <div class="panel-subtitle">Enter your credentials to continue</div>
+            </div>
 
-    <div class="coming-soon">Coming Soon</div>
-    <div class="copyright">COPYRIGHT  █▬█ █ ▀█▀ █▀█ █▄█ ▀█▀ ▄ ▄█ █ █▄ █▄ 2025</div>
+            <div class="tabs">
+                <div class="tab active" id="login-tab">LOGIN</div>
+                <div class="tab" id="register-tab">REGISTER</div>
+            </div>
+
+            <div class="tab-content active" id="login-content">
+                <form>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" class="form-control" placeholder="Enter your username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Enter your password">
+                        </div>
+                    </div>
+
+                    <div class="remember-me">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="showNotification()">
+                            LOGIN <i class="fas fa-sign-in-alt" style="margin-left: 5px;"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="divider">OR CONTINUE WITH</div>
+
+                <div class="auth-options">
+                    <div class="auth-option" onclick="showNotification()">
+                        <i class="fab fa-discord"></i> Discord
+                    </div>
+                    <div class="auth-option" onclick="showNotification()">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </div>
+                </div>
+
+                <div class="extra-options">
+                    <a href="#" onclick="showNotification()">Forgot Password?</a>
+                </div>
+            </div>
+
+            <div class="tab-content" id="register-content">
+                <form>
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="reg-username" class="form-control" placeholder="Choose a username">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="reg-email" class="form-control" placeholder="Enter your email">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="reg-password" class="form-control" placeholder="Create a password">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reg-confirm">Confirm Password</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="reg-confirm" class="form-control" placeholder="Confirm your password">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-primary" onclick="showNotification()">
+                            REGISTER <i class="fas fa-user-plus" style="margin-left: 5px;"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="divider">REGISTRATION CODE REQUIRED</div>
+
+                <div class="form-group">
+                    <label for="invite-code">Invite Code</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-key"></i>
+                        <input type="text" id="invite-code" class="form-control" placeholder="Enter your invite code">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-brand">HITNUT.club © 2025</div>
+        <div class="security-info">Forum Software by HITNUT</div>
+    </footer>
+
+    <script>
+        // Tab switching functionality
+        document.getElementById('login-tab').addEventListener('click', function() {
+            document.getElementById('login-tab').classList.add('active');
+            document.getElementById('register-tab').classList.remove('active');
+            document.getElementById('login-content').classList.add('active');
+            document.getElementById('register-content').classList.remove('active');
+        });
+
+        document.getElementById('register-tab').addEventListener('click', function() {
+            document.getElementById('register-tab').classList.add('active');
+            document.getElementById('login-tab').classList.remove('active');
+            document.getElementById('register-content').classList.add('active');
+            document.getElementById('login-content').classList.remove('active');
+        });
+
+        // Notification functions
+        function showNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                closeNotification();
+            }, 5000);
+        }
+
+        function closeNotification() {
+            const notification = document.getElementById('notification');
+            notification.classList.remove('show');
+        }
+    </script>
 </body>
 </html>
