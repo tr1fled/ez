@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naughty Miko Studios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Exo+2:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 400;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 25%, #2d2d2d 50%, #1a1a1a 75%, #000000 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 8s infinite linear;
+        }
+
+        .particle:nth-child(odd) {
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .particle:nth-child(even) {
+            width: 2px;
+            height: 2px;
+            background: rgba(200, 200, 200, 0.6);
+            box-shadow: 0 0 8px rgba(200, 200, 200, 0.3);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 1.2rem 0;
+            transition: all 0.4s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffffff, #f0f0f0, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #f0f0f0;
+            transform: translateY(-3px);
+            text-shadow: 0 5px 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #ffffff, #cccccc);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: heroEntrance 1.5s ease-out;
+        }
+
+        .hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: 5.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #ffffff, #e0e0e0, #ffffff, #f5f5f5);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease-in-out infinite, textGlow 2s ease-in-out infinite alternate;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .hero p {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+            color: #e0e0e0;
+            line-height: 1.8;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(45deg, #333333, #555555, #444444);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.4s ease;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+            background: linear-gradient(45deg, #444444, #666666, #555555);
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+
+        .cta-button:hover::before {
+            animation: shine 0.6s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        @keyframes heroEntrance {
+            from { opacity: 0; transform: translateY(80px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes textGlow {
+            from { text-shadow: 0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.1); }
+            to { text-shadow: 0 0 30px rgba(255, 255, 255, 0.5), 0 0 60px rgba(255, 255, 255, 0.2); }
+        }
+
+        .games {
+            padding: 8rem 0;
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 50%, rgba(255, 255, 255, 0.02) 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 4rem;
+            background: linear-gradient(45deg, #ffffff, #e0e0e0, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border-radius: 25px;
+            padding: 3rem;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease;
+        }
+
+        .game-card:hover::before {
+            transform: scale(1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-card h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-card p {
+            font-family: 'Exo 2', sans-serif;
+            color: #d0d0d0;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .game-status {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            border-radius: 25px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-development {
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: 2% auto;
+            padding: 3rem;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 85vh;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            animation: modalSlideIn 0.4s ease-out;
+            backdrop-filter: blur(20px);
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-80px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .close {
+            position: absolute;
+            right: 2rem;
+            top: 1.5rem;
+            font-size: 2.5rem;
+            cursor: pointer;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .close:hover {
+            color: #cccccc;
+            transform: scale(1.1);
+        }
+
+        .modal h2 {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .modal h3 {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin: 2rem 0 1rem 0;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .modal p, .modal li {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.1rem;
+            color: #d0d0d0;
+            line-height: 1.7;
+        }
+
+        .game-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .game-image {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-image:hover {
+            transform: scale(1.05);
+        }
+
+        .game-image img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 15px;
+        }
+
+        .screenshot-placeholder {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, #333333, #555555);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .about {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            position: relative;
+            z-index: 10;
+        }
+
+        .about-content {
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .about p {
+            font-family: 'Exo 2', sans-serif;
+            font-size: 1.2rem;
+            color: #d0d0d0;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
+        }
+
+        .footer p {
+            font-family: 'Exo 2', sans-serif;
+            color: #999999;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 5% auto;
+                padding: 2rem;
+                max-height: 90vh;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">NAUGHTY MIKO STUDIOS</div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#games">Games</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>NAUGHTY MIKO STUDIOS</h1>
+            <p>Pioneering the future of interactive entertainment through cutting-edge game development. We specialize in creating immersive, story-driven experiences that blur the lines between reality and digital worlds, bringing the extraordinary life of Miko Zdravkovski and his universe to players worldwide.</p>
+            <a href="#games" class="cta-button">EXPLORE OUR UNIVERSE</a>
+        </div>
+    </section>
+
+    <section class="games" id="games">
+        <div class="container">
+            <h2 class="section-title">OUR GAMES</h2>
+            <div class="games-grid">
+                <div class="game-card" onclick="openModal('zdravkovskiCity')">
+                    <h3>ZDRAVKOVSKI CITY</h3>
+                    <p>An open-world GTA-style action-adventure game set in the vibrant streets of Memmingen, Germany. Experience the thrilling life of Miko Zdravkovski alongside his family - parents Elizabeta Zdravkovska and Miroslav Zdravkovski, plus the wildly entertaining "Mr. Bean Freak" Magvid Zdravkovski. Navigate through intense missions, family dynamics, and urban chaos in this groundbreaking narrative-driven experience.</p>
+                    <span class="game-status status-development">IN DEVELOPMENT</span>
+                </div>
+                
+                <div class="game-card">
+                    <h3>PROJECT ALPHA</h3>
+                    <p>A uniquely twisted educational horror experience that turns learning into survival. Navigate through deceptively cheerful school environments where knowledge is your only weapon against increasingly bizarre and menacing situations. This psychological thriller combines classic puzzle-solving mechanics with unsettling atmosphere, featuring a protagonist who must use wit and cunning to escape an educational nightmare where failing means more than just a bad grade.</p>
+                    <span class="game-status status-development">IN DEVELOPMENT</span>
+                </div>
+                
+                <div class="game-card">
+                    <h3>PROJECT BETA</h3>
+                    <p>The third installment in our upcoming gaming trilogy promises to deliver unprecedented levels of immersion and engagement. Featuring advanced AI systems, dynamic weather simulation, and revolutionary character development mechanics that adapt to player choices in real-time.</p>
+                    <span class="game-status status-development">COMING SOON</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">ABOUT THE STUDIO</h2>
+            <div class="about-content">
+                <p>Naughty Miko Studios represents the pinnacle of modern game development, where cutting-edge technology meets authentic storytelling. Our mission is to create immersive gaming experiences that transcend traditional boundaries.</p>
+                <p>Founded with the vision of bringing real-life narratives into the digital realm, we specialize in developing high-quality, story-driven games that resonate with players on a deeply personal level. Our flagship title, Zdravkovski City, showcases our commitment to innovative gameplay and authentic character development.</p>
+                <p>We believe that the future of gaming lies in the seamless integration of reality and fiction, creating worlds that feel alive, characters that feel real, and stories that matter. Every project we undertake is crafted with meticulous attention to detail and an unwavering commitment to excellence.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <p>&copy; 2025 Naughty Miko Studios. All rights reserved. | Contact: info@elizabeta.pics</p>
+        </div>
+    </footer>
+
+    <div id="zdravkovskiCityModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('zdravkovskiCity')">&times;</span>
+            <h2>ZDRAVKOVSKI CITY</h2>
+            <p>Step into the shoes of Miko Zdravkovski in this groundbreaking open-world GTA-style adventure set in the bustling streets of Memmingen, Germany. Navigate through a living, breathing city where every choice matters and every interaction shapes your destiny.</p>
+            
+            <h3>GAME FEATURES:</h3>
+            <ul style="color: #d0d0d0; margin: 1rem 0; padding-left: 2rem; font-family: 'Exo 2', sans-serif;">
+                <li><strong>Open-World Exploration:</strong> Fully explorable recreation of Memmingen with dynamic weather and day/night cycles</li>
+                <li><strong>Family Dynamics System:</strong> Deep relationship mechanics with Elizabeta, Miroslav, and the eccentric Magvid</li>
+                <li><strong>Mission Variety:</strong> From intense action sequences to heartfelt family moments</li>
+                <li><strong>Character-Driven Narrative:</strong> Authentic storytelling based on real-life events and personalities</li>
+                <li><strong>Advanced AI:</strong> NPCs with realistic behaviors and memorable interactions</li>
+                <li><strong>Customization System:</strong> Extensive character and vehicle customization options</li>
+            </ul>
+            
+            <h3>GAME ART:</h3>
+            <div class="game-images">
+                <div class="game-image">
+                    <div class="screenshot-placeholder">
+                        GTA-Style Gameplay Screenshot 1
+                        <br><small style="opacity: 0.7;">Miko in Downtown Memmingen</small>
+                    </div>
+                </div>
+                <div class="game-image">
+                    <div class="screenshot-placeholder">
+                        Family Interaction Screenshot 2
+                        <br><small style="opacity: 0.7;">Zdravkovski Family Dynamics</small>
+                    </div>
+                </div>
+                <div class="game-image">
+                    <div class="screenshot-placeholder">
+                        Open World Environment 3
+                        <br><small style="opacity: 0.7;">Memmingen City Streets</small>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="margin-top: 3rem; color: #d0d0d0; font-style: italic; font-size: 1.1rem; text-align: center; font-family: 'Exo 2', sans-serif;">
+                <strong>Currently in active development.</strong> Experience the most authentic open-world family adventure ever created. Coming to PC 2025.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 80;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            const scrolled = window.scrollY;
+            
+            if (scrolled > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.98)';
+                header.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+                header.style.boxShadow = 'none';
+            }
+        });
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId + 'Modal');
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId + 'Modal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 1s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.game-card, .about-content').forEach(element => {
+            observer.observe(element);
+        });
+
+        document.querySelectorAll('.game-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-15px) rotateX(5deg) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) rotateX(0deg) scale(1)';
+            });
+        });
+
+        function typeWriter(element, text, speed = 80) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            const heroTitle = document.querySelector('.hero h1');
+            const originalText = heroTitle.textContent;
+            setTimeout(() => {
+                typeWriter(heroTitle, originalText, 120);
+            }, 500);
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const openModal = document.querySelector('.modal[style*="block"]');
+                if (openModal) {
+                    openModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
